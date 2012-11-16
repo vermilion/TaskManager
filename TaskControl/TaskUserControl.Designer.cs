@@ -30,6 +30,7 @@ namespace TaskControl
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -40,9 +41,16 @@ namespace TaskControl
             this.tabPage0 = new System.Windows.Forms.TabPage();
             this.DescriptionText = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.historyBox = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AssignedTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Priority = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Progress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
@@ -73,17 +81,13 @@ namespace TaskControl
             this.ModifiedDateBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AssignedTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Priority = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Progress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.iViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.iViewBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage0.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBar)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -91,7 +95,8 @@ namespace TaskControl
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iViewBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iViewBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -130,7 +135,7 @@ namespace TaskControl
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.treeView1);
+            this.tabPage1.Controls.Add(this.webBrowser1);
             this.tabPage1.Controls.Add(this.historyBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
@@ -140,26 +145,27 @@ namespace TaskControl
             this.tabPage1.Text = "History";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // treeView1
+            // webBrowser1
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.FullRowSelect = true;
-            this.treeView1.Location = new System.Drawing.Point(3, 54);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.ShowPlusMinus = false;
-            this.treeView1.ShowRootLines = false;
-            this.treeView1.Size = new System.Drawing.Size(926, 170);
-            this.treeView1.TabIndex = 2;
-            this.treeView1.TabStop = false;
+            this.webBrowser1.AllowWebBrowserDrop = false;
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.IsWebBrowserContextMenuEnabled = false;
+            this.webBrowser1.Location = new System.Drawing.Point(3, 48);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(926, 176);
+            this.webBrowser1.TabIndex = 3;
+            this.webBrowser1.WebBrowserShortcutsEnabled = false;
             // 
             // historyBox
             // 
             this.historyBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.historyBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.historyBox.HideSelection = false;
             this.historyBox.Location = new System.Drawing.Point(3, 3);
             this.historyBox.Multiline = true;
             this.historyBox.Name = "historyBox";
-            this.historyBox.Size = new System.Drawing.Size(926, 51);
+            this.historyBox.Size = new System.Drawing.Size(926, 45);
             this.historyBox.TabIndex = 0;
             // 
             // tabPage2
@@ -172,6 +178,105 @@ namespace TaskControl
             this.tabPage2.TabIndex = 3;
             this.tabPage2.Text = "Related";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.Title,
+            this.AssignedTo,
+            this.State,
+            this.Priority,
+            this.Progress});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 30);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(932, 197);
+            this.dataGridView1.TabIndex = 3;
+            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DataGridView1MouseDoubleClick);
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ID.FillWeight = 5F;
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            // 
+            // Title
+            // 
+            this.Title.DataPropertyName = "Title";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Title.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Title.FillWeight = 30F;
+            this.Title.HeaderText = "Title";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // AssignedTo
+            // 
+            this.AssignedTo.DataPropertyName = "AssignedTo";
+            this.AssignedTo.FillWeight = 10F;
+            this.AssignedTo.HeaderText = "Assigned To";
+            this.AssignedTo.Name = "AssignedTo";
+            this.AssignedTo.ReadOnly = true;
+            // 
+            // State
+            // 
+            this.State.DataPropertyName = "State";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.State.DefaultCellStyle = dataGridViewCellStyle3;
+            this.State.FillWeight = 8F;
+            this.State.HeaderText = "State";
+            this.State.Name = "State";
+            this.State.ReadOnly = true;
+            // 
+            // Priority
+            // 
+            this.Priority.DataPropertyName = "Priority";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Priority.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Priority.FillWeight = 5F;
+            this.Priority.HeaderText = "Priority";
+            this.Priority.Name = "Priority";
+            this.Priority.ReadOnly = true;
+            // 
+            // Progress
+            // 
+            this.Progress.DataPropertyName = "Progress";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.NullValue = null;
+            this.Progress.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Progress.FillWeight = 3F;
+            this.Progress.HeaderText = "%";
+            this.Progress.Name = "Progress";
+            this.Progress.ReadOnly = true;
             // 
             // toolStrip2
             // 
@@ -345,7 +450,7 @@ namespace TaskControl
             // 
             this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressBar.LargeChange = 10;
-            this.ProgressBar.Location = new System.Drawing.Point(3, 16);
+            this.ProgressBar.Location = new System.Drawing.Point(3, 19);
             this.ProgressBar.Maximum = 100;
             this.ProgressBar.Name = "ProgressBar";
             this.ProgressBar.Size = new System.Drawing.Size(367, 45);
@@ -524,104 +629,13 @@ namespace TaskControl
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "About creation";
             // 
-            // dataGridView1
+            // iViewBindingSource
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
-            this.Title,
-            this.AssignedTo,
-            this.State,
-            this.Priority,
-            this.Progress});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.GridColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 30);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(932, 197);
-            this.dataGridView1.TabIndex = 3;
-            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DataGridView1MouseDoubleClick);
+            this.iViewBindingSource.DataSource = typeof(TaskControl.IView);
             // 
-            // ID
+            // iViewBindingSource1
             // 
-            this.ID.DataPropertyName = "ID";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.ID.DefaultCellStyle = dataGridViewCellStyle1;
-            this.ID.FillWeight = 5F;
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            // 
-            // Title
-            // 
-            this.Title.DataPropertyName = "Title";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Title.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Title.FillWeight = 30F;
-            this.Title.HeaderText = "Title";
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            // 
-            // AssignedTo
-            // 
-            this.AssignedTo.DataPropertyName = "AssignedTo";
-            this.AssignedTo.FillWeight = 10F;
-            this.AssignedTo.HeaderText = "Assigned To";
-            this.AssignedTo.Name = "AssignedTo";
-            this.AssignedTo.ReadOnly = true;
-            // 
-            // State
-            // 
-            this.State.DataPropertyName = "State";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.State.DefaultCellStyle = dataGridViewCellStyle3;
-            this.State.FillWeight = 8F;
-            this.State.HeaderText = "State";
-            this.State.Name = "State";
-            this.State.ReadOnly = true;
-            // 
-            // Priority
-            // 
-            this.Priority.DataPropertyName = "Priority";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Priority.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Priority.FillWeight = 5F;
-            this.Priority.HeaderText = "Priority";
-            this.Priority.Name = "Priority";
-            this.Priority.ReadOnly = true;
-            // 
-            // Progress
-            // 
-            this.Progress.DataPropertyName = "Progress";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.NullValue = null;
-            this.Progress.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Progress.FillWeight = 3F;
-            this.Progress.HeaderText = "%";
-            this.Progress.Name = "Progress";
-            this.Progress.ReadOnly = true;
+            this.iViewBindingSource1.DataSource = typeof(TaskControl.IView);
             // 
             // TaskUserControl
             // 
@@ -642,6 +656,7 @@ namespace TaskControl
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBar)).EndInit();
@@ -655,7 +670,8 @@ namespace TaskControl
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iViewBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iViewBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -693,7 +709,6 @@ namespace TaskControl
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox PriorityBox;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
@@ -707,5 +722,8 @@ namespace TaskControl
         private System.Windows.Forms.DataGridViewTextBoxColumn State;
         private System.Windows.Forms.DataGridViewTextBoxColumn Priority;
         private System.Windows.Forms.DataGridViewTextBoxColumn Progress;
+        private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.BindingSource iViewBindingSource;
+        private System.Windows.Forms.BindingSource iViewBindingSource1;
     }
 }

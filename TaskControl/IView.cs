@@ -6,13 +6,19 @@ namespace TaskControl
 {
     public interface IView
     {
-        // Dictionary<Data, List<History>> List { get; }
+        /// <summary>
+        /// Main forms tabcontrol
+        /// </summary>
         TabControl GetTabControl { get; }
+
+        /// <summary>
+        /// Allows to get list of tasks
+        /// </summary>
         IEnumerable<Data> DataList { get; }
+
+        /// <summary>
+        /// Allows to get history list
+        /// </summary>
         IEnumerable<History> HistoryList { get; }
-        //DataTable Table { get; }
-        /*ListView GetListView { get; }
-        bool ShowClosed { get; }
-        void AddUserControl(long id);*/
     }
 }

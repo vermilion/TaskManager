@@ -2,10 +2,9 @@
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Common;
 using Model;
 using TaskManager.Properties;
 
@@ -18,18 +17,18 @@ namespace TaskManager.Forms
         public LoginForm()
         {
             InitializeComponent();
-            checkBox1.Checked = bool.Parse(ConfigurationManager.AppSettings["save"]);
+            saveCheckBox.Checked = bool.Parse(ConfigurationManager.AppSettings["save"]);
             LoginTextBox.Text = ConfigurationManager.AppSettings["login"];
             PasswordTextBox.Text = ConfigurationManager.AppSettings["pass"];
 
             _communicator.UpgradeDatabase();
         }
 
-        private void Button1Click(object sender, EventArgs e)
+        private void LoginButtonClick(object sender, EventArgs e)
         {
-            var pass = Regex.IsMatch(PasswordTextBox.Text, "[0-9a-fA-F]{32}")
-                           ? PasswordTextBox.Text
-                           : ComputeMd5Checksum(PasswordTextBox.Text);
+            string pass = Regex.IsMatch(PasswordTextBox.Text, "[0-9a-fA-F]{32}")
+                              ? PasswordTextBox.Text
+                              : ConfigurationHelper.ComputeMd5Checksum(PasswordTextBox.Text);
 
             User user = _communicator.GetList<User>("Users")
                 .FirstOrDefault(x => x.Login == LoginTextBox.Text && x.Pass == pass);
@@ -38,10 +37,10 @@ namespace TaskManager.Forms
                 MessageBox.Show(Resources.Try_again, Resources.Wrong_login_pass);
             else
             {
-                if (checkBox1.Checked)
+                if (saveCheckBox.Checked)
                 {
-                    DataClass.SaveSettings("login", LoginTextBox.Text);
-                    DataClass.SaveSettings("pass", pass);
+                    ConfigurationHelper.SaveSettings("login", LoginTextBox.Text);
+                    ConfigurationHelper.SaveSettings("pass", pass);
                 }
 
                 MessageBox.Show(Resources.logged_in_as + user.ShowAs);
@@ -51,14 +50,14 @@ namespace TaskManager.Forms
         }
 
 
-        private void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void RegisterLinkLabelClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (LoginTextBox.Text == "" || PasswordTextBox.Text == "") return;
 
             var user = new User
                            {
                                Login = LoginTextBox.Text,
-                               Pass = ComputeMd5Checksum(PasswordTextBox.Text),
+                               Pass = ConfigurationHelper.ComputeMd5Checksum(PasswordTextBox.Text),
                                ShowAs = LoginTextBox.Text
                            };
 
@@ -77,16 +76,9 @@ namespace TaskManager.Forms
             }
         }
 
-        private void CheckBox1CheckedChanged(object sender, EventArgs e)
+        private void SaveCheckBoxCheckedChanged(object sender, EventArgs e)
         {
-            DataClass.SaveSettings("save", checkBox1.Checked.ToString(CultureInfo.InvariantCulture));
-        }
-
-        private string ComputeMd5Checksum(string input)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] data = md5.ComputeHash(Encoding.Default.GetBytes(input));
-            return BitConverter.ToString(data).Replace("-", String.Empty);
+            ConfigurationHelper.SaveSettings("save", saveCheckBox.Checked.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

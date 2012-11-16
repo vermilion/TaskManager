@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataClass.cs" />
     <Compile Include="Forms\DGVOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +97,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{834F0EE0-50FE-4557-AFC5-EB18A6C3C436}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{DCF49F2D-706C-453F-85F4-4C653EB9B90A}</Project>
       <Name>Model</Name>

@@ -12,7 +12,7 @@ namespace TaskControl
     {
         #region Delegates
 
-        public delegate void TaskChanged(long id, TabControl tabControl);
+        public delegate void TaskChanged(TabControl tabControl, long id = -1);
 
         public delegate void TaskClose(TaskUserControl uc);
 
@@ -24,9 +24,23 @@ namespace TaskControl
         private readonly IView _view;
 
         private List<History> _history;
+
+        /// <summary>
+        /// Task ID
+        /// </summary>
         private long _id;
+
+        /// <summary>
+        /// List of related items
+        /// </summary>
         private List<string> _related = new List<string>();
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="frm">form interface</param>
+        /// <param name="id">task id</param>
         public TaskUserControl(IView frm, long id)
         {
             InitializeComponent();
@@ -37,12 +51,12 @@ namespace TaskControl
                 _communicator.GetList<User>("Users").Select(x => (object) x.ShowAs).ToArray());
         }
 
-        private List<History> HistoryItem
+        private List<History> HistoryList
         {
             set
             {
                 _history = value;
-                PopulateHistory(GetTreeView, value.OrderByDescending(x => x.Datetime).ToList());
+                PopulateHistory(value.OrderByDescending(x => x.Datetime).ToList());
             }
             get { return _history; }
         }
@@ -63,8 +77,8 @@ namespace TaskControl
                     AssignedToComboBox.SelectedItem = value.AssignedTo;
                     StateComboBox.Text = value.State;
                     CreatedByText.Text = value.CreatedBy;
-                    CreationDateText.Text = value.CreationDate.ToString(CultureInfo.InvariantCulture);
-                    ModifiedDateBox.Text = value.Datetime.ToString(CultureInfo.InvariantCulture);
+                    CreationDateText.Text = value.CreationDate;
+                    ModifiedDateBox.Text = value.Datetime;
                     DescriptionText.Text = value.Description;
                     ProgressBar.Value = int.Parse(value.Progress);
                     PriorityBox.SelectedItem = value.Priority;
@@ -99,44 +113,37 @@ namespace TaskControl
             }
         }
 
-        private TreeView GetTreeView
-        {
-            get { return treeView1; }
-        }
-
         public event TaskChanged TaskOpened;
         public event TaskClose TaskClosed;
 
-        private void PopulateRelated(string related, IEnumerable<Data> item)
+        /// <summary>
+        /// Allows to populate related items grid
+        /// </summary>
+        /// <param name="related">related string separated by comma (,)</param>
+        /// <param name="list">source list</param>
+        private void PopulateRelated(string related, IEnumerable<Data> list)
         {
             dataGridView1.Rows.Clear();
 
             if (related != string.Empty)
-                PopulateListView(item
-                                     .Where(x => related.Split(',')
-                                                     .Any(y => y == x.ID.ToString(CultureInfo.InvariantCulture))),
-                                 dataGridView1);
+                PopulateDataGridView(list.Where(x => related
+                                                         .Split(',')
+                                                         .Any(y => y == x.ID.ToString(CultureInfo.InvariantCulture))),
+                                     dataGridView1);
         }
 
         /// <summary>
         /// Allows to populate history  tree
         /// </summary>
-        /// <param name="tw">tree to populate</param>
         /// <param name="list">source list of History</param>
-        private static void PopulateHistory(TreeView tw, IEnumerable<History> list)
+        private void PopulateHistory(IEnumerable<History> list)
         {
-            tw.BeginUpdate();
-            tw.Nodes.Clear();
-
-            foreach (History history in list)
-            {
-                var root = new TreeNode {Text = string.Format("{0}: {1}", history.User, history.Text)};
-                tw.Nodes.Add(root);
-
-                root.Nodes.Add(history.Datetime);
-            }
-            tw.ExpandAll();
-            tw.EndUpdate();
+            webBrowser1.DocumentText = Resources.style +
+                                       list.Aggregate("",
+                                                      (s, history) => s + Resources.show
+                                                                              .Replace("{DateTime}", history.Datetime)
+                                                                              .Replace("{FIO}", history.User)
+                                                                              .Replace("{Text}", history.Text));
         }
 
         /// <summary>
@@ -145,22 +152,30 @@ namespace TaskControl
         /// <param name="id">task ID</param>
         private void ReloadData(long id)
         {
+            Cursor = Cursors.WaitCursor;
             IEnumerable<Data> list = _view.DataList;
             DataItem = list.FirstOrDefault(x => x.ID == id);
 
-            if (id == -1 || DataItem == null) return;
+            if (id == -1 || DataItem == null)
+            {
+                Cursor = Cursors.Default;
+                return;
+            }
             PopulateRelated(DataItem.Related, list);
 
-            HistoryItem = _view.HistoryList
+            HistoryList = _view.HistoryList
                 .Where(x => x.DataID == id)
                 .OrderByDescending(x => x.Datetime)
                 .ToList();
 
             Parent.Text = string.Format("[{0}] {1}", DataItem.ID, DataItem.Title);
             Parent.Tag = id;
+            Cursor = Cursors.Default;
         }
 
-
+        /// <summary>
+        /// Check if ID exists
+        /// </summary>
         private void ToolStripButton4Click(object sender, EventArgs e)
         {
             int i;
@@ -178,12 +193,9 @@ namespace TaskControl
         /// </summary>
         /// <param name="list">list with values</param>
         /// <param name="dgv">target DataGridView</param>
-        private static void PopulateListView(IEnumerable<Data> list, DataGridView dgv)
+        private static void PopulateDataGridView(IEnumerable<Data> list, DataGridView dgv)
         {
-            dgv.Rows.Clear();
-
-            list
-                .ToList()
+            list.ToList()
                 .ForEach(x => dgv.Rows.Add(new object[]
                                                {
                                                    x.ID,
@@ -194,7 +206,6 @@ namespace TaskControl
                                                    x.Progress
                                                }));
         }
-
 
         //close
         private void ToolStripButton3Click(object sender, EventArgs e)
@@ -211,7 +222,7 @@ namespace TaskControl
 
             if (!string.IsNullOrWhiteSpace(historyBox.Text))
             {
-                HistoryItem.Add(new History
+                HistoryList.Add(new History
                                     {
                                         Text = historyBox.Text,
                                         User = UserData.UserName,
@@ -219,7 +230,7 @@ namespace TaskControl
                                     });
 
                 historyBox.Text = string.Empty;
-                HistoryItem.ToList().ForEach(x => _communicator.ModifyItem(x, "ID", x.ID, "History"));
+                HistoryList.ToList().ForEach(x => _communicator.ModifyItem(x, "ID", x.ID, "History"));
             }
 
             ReloadData(_id);
@@ -233,16 +244,15 @@ namespace TaskControl
 
         //reload
         private void TaskUserControlLoad(object sender, EventArgs e)
-        {
-            ReloadData(_id);
+        {            
+            ReloadData(_id);            
         }
 
         private void DataGridView1MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count != 0)
-                if (TaskOpened != null)
-                    TaskOpened(long.Parse(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString()),
-                               _view.GetTabControl);
+            if (dataGridView1.SelectedRows.Count == 0) return;
+            if (TaskOpened != null)
+                TaskOpened(_view.GetTabControl, long.Parse(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString()));
         }
     }
 }

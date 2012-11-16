@@ -120,6 +120,116 @@
   <data name="Input_valid_task_ID" xml:space="preserve">
     <value>Input valid task ID</value>
   </data>
+  <data name="show" xml:space="preserve">
+    <value>&lt;div class="MTVContainer"&gt;
+&lt;table  cellspacing="1" cellpadding="3" rules="all" border="0"   class="table_request"&gt;
+	&lt;tr&gt;
+		&lt;td style="width:20%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;" colspan="1"  class="table_dark_row"&gt;{DateTime}&lt;/td&gt;
+		&lt;td style="width:80%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;" colspan="3"  class="table_dark_row"&gt;{FIO}&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td style="width:100%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;" colspan="4"&gt;{Text}&lt;/td&gt;
+	&lt;/tr&gt;	
+&lt;/table&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="style" xml:space="preserve">
+    <value>&lt;style&gt;
+.table_header
+{
+color:buttontext;
+background-color:buttonface;
+border-color:Black;
+font-size:Small;
+font-style:normal;
+white-space:nowrap;
+font:10px Tahoma, Verdana, Arial, Helvetica, sans-serif;}
+
+.table_request
+{
+font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;
+background-color:Black;
+border-color:Black;
+border-width:0px;
+border-style:Solid;
+width:98%;
+}
+
+.table_request td
+{
+color:Black;
+background-color:White;
+}
+
+.table_request td.table_dark_row
+{
+color:buttontext;
+background-color:buttonface;
+border-color:Black;
+font-size:Small;
+font-style:normal;
+white-space:nowrap;
+}
+
+.table_response
+{
+font:13px Tahoma, Verdana, Arial, Helvetica, sans-serif;	
+background-color:Black;
+border-color:Black;
+border-width:0px;
+border-style:Solid;
+width:98%;
+}
+
+.table_response td
+{
+color:Black;
+background-color:White;
+}
+
+.table_response td.table_dark_row
+{
+color:buttontext;
+background-color:buttonface;
+border-color:Black;
+font-size:Small;
+font-style:normal;
+white-space:nowrap;
+}
+
+.table_additional
+{
+font:13px Tahoma, Verdana, Arial, Helvetica, sans-serif;	
+background-color:Black;
+border-color:Black;
+border-width:0px;
+border-style:Solid;
+width:100%;
+padding:0px;
+}
+
+.table_additional tr.table_dark_row td
+{
+background-color:buttonface;
+color:buttontext;
+border-color:Black;
+font-size:Small;
+font-style:normal;
+white-space:nowrap;
+}
+
+.table_additional tr td
+{
+color:Black;
+background-color:White;
+}
+
+.MTVContainer
+{
+margin:3px 3px 3px 3px;
+}
+&lt;/style&gt;</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="_1349008968_arrow_circle_double" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1349008968_arrow_circle_double.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

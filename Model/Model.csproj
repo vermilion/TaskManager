@@ -12,6 +12,7 @@
     <AssemblyName>Model</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,9 +36,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\TaskManager\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -45,8 +43,12 @@
     <Compile Include="Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteCommunicator.cs" />
-    <Compile Include="SQLiteDatabaseHelper.cs" />
-    <Compile Include="Trace.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{834F0EE0-50FE-4557-AFC5-EB18A6C3C436}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -89,5 +89,60 @@ namespace TaskControl.Properties {
                 return ResourceManager.GetString("Input_valid_task_ID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;MTVContainer&quot;&gt;
+        ///&lt;table  cellspacing=&quot;1&quot; cellpadding=&quot;3&quot; rules=&quot;all&quot; border=&quot;0&quot;   class=&quot;table_request&quot;&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width:20%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;&quot; colspan=&quot;1&quot;  class=&quot;table_dark_row&quot;&gt;{DateTime}&lt;/td&gt;
+        ///		&lt;td style=&quot;width:80%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;&quot; colspan=&quot;3&quot;  class=&quot;table_dark_row&quot;&gt;{FIO}&lt;/td&gt;
+        ///	&lt;/tr&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width:100%;font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;&quot; colspan=&quot;4&quot;&gt;{Text}&lt;/td&gt;
+        ///	&lt;/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string show {
+            get {
+                return ResourceManager.GetString("show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style&gt;
+        ///.table_header
+        ///{
+        ///color:buttontext;
+        ///background-color:buttonface;
+        ///border-color:Black;
+        ///font-size:Small;
+        ///font-style:normal;
+        ///white-space:nowrap;
+        ///font:10px Tahoma, Verdana, Arial, Helvetica, sans-serif;}
+        ///
+        ///.table_request
+        ///{
+        ///font:12px Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        ///background-color:Black;
+        ///border-color:Black;
+        ///border-width:0px;
+        ///border-style:Solid;
+        ///width:98%;
+        ///}
+        ///
+        ///.table_request td
+        ///{
+        ///color:Black;
+        ///background-color:White;
+        ///}
+        ///
+        ///.table_request td.table_dark_row
+        ///{
+        ///color:button [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string style {
+            get {
+                return ResourceManager.GetString("style", resourceCulture);
+            }
+        }
     }
 }

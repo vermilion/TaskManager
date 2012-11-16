@@ -5,6 +5,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Common;
 using Model;
 using TaskControl;
 
@@ -17,20 +18,25 @@ namespace TaskManager.Forms
         public MainForm()
         {
             InitializeComponent();
-            dataGridView1.AutoGenerateColumns = false;
+            taskGridView.AutoGenerateColumns = false;
 
-            ((DataGridViewComboBoxColumn) dataGridView2.Columns["Field"]).Items.AddRange(
-                dataGridView1.Columns
-                    .Cast<DataGridViewColumn>()
-                    .Select(x => (object) x.Name)
-                    .ToArray());
-
+            var column = (DataGridViewComboBoxColumn) queryGridView.Columns["Field"];
+            if (column != null)
+                column.Items.AddRange(
+                    taskGridView.Columns
+                        .Cast<DataGridViewColumn>()
+                        .Select(x => (object) x.Name)
+                        .ToArray());
 
             QueryBuilder.ReloadQueries(queriesBox);
             queriesBox.SelectedItem = ConfigurationManager.AppSettings["StartupQuery"];
-            QueryBuilder.RestoreQuery(dataGridView2, string.Format("{0}\\Query\\{1}.xml",
-                                                                   Application.StartupPath,
+            QueryBuilder.RestoreQuery(queryGridView, string.Format("{0}.xml",
                                                                    ConfigurationManager.AppSettings["StartupQuery"]));
+        }
+
+        private DataTable Table
+        {
+            get { return _sqlite.GetTable("Data"); }
         }
 
         #region IView Members
@@ -38,11 +44,6 @@ namespace TaskManager.Forms
         public TabControl GetTabControl
         {
             get { return tabControl1; }
-        }
-
-        public DataTable Table
-        {
-            get { return _sqlite.GetTable("Data"); }
         }
 
         public IEnumerable<Data> DataList
@@ -62,37 +63,49 @@ namespace TaskManager.Forms
             Populate();
         }
 
-
+        /// <summary>
+        /// Populates main grid
+        /// </summary>
         private void Populate()
         {
+            Cursor = Cursors.WaitCursor;
             bindingSource1.DataSource = Table;
-            bindingSource1.Sort = "ID DESC";
-            QueryBuilder.ApplyFilter(bindingSource1, dataGridView2);
+            QueryBuilder.ApplyFilter(bindingSource1, queryGridView);
+            Cursor = Cursors.Default;
         }
 
-        private void AddUserControl(long id, TabControl tabControl)
+        /// <summary>
+        /// Allows to add new task control
+        /// </summary>
+        /// <param name="id">task ID</param>
+        /// <param name="tabControl">TabControl to add to</param>
+        private void AddUserControl(TabControl tabControl, long id = -1)
         {
-            foreach (TabPage tabPage in tabControl.TabPages
-                .Cast<TabPage>()
-                .Where(
-                    tabPage =>
-                    tabPage.Tag != null &&
-                    tabPage.Tag.ToString() == id.ToString(CultureInfo.InvariantCulture)))
+            try
             {
-                tabControl.SelectTab(tabPage);
-                return;
+                tabControl.SelectTab(
+                    tabControl.TabPages
+                        .Cast<TabPage>()
+                        .First(x => x.Tag != null
+                                    && x.Tag.ToString() == id.ToString(CultureInfo.InvariantCulture)));
             }
+            catch (Exception)
+            {
+                var tp = new TabPage {Tag = id};
+                var tuc = new TaskUserControl(this, id) {Dock = DockStyle.Fill};
+                tuc.TaskOpened += AddUserControl;
+                tuc.TaskClosed += TucTaskClosed;
+                tp.Controls.Add(tuc);
 
-            var tp = new TabPage {Tag = id};
-            var tuc = new TaskUserControl(this, id) {Dock = DockStyle.Fill};
-            tuc.TaskOpened += AddUserControl;
-            tuc.TaskClosed += TucTaskClosed;
-            tp.Controls.Add(tuc);
-
-            tabControl.TabPages.Add(tp);
-            tabControl.SelectTab(tp);
+                tabControl.TabPages.Add(tp);
+                tabControl.SelectTab(tp);
+            }
         }
 
+        /// <summary>
+        /// Event of task closed
+        /// </summary>
+        /// <param name="uc">TaskUserControl</param>
         private void TucTaskClosed(TaskUserControl uc)
         {
             Populate();
@@ -101,38 +114,27 @@ namespace TaskManager.Forms
 
         private void AddToolStripMenuItemClick(object sender, EventArgs e)
         {
-            AddUserControl(-1, tabControl1);
+            AddUserControl(tabControl1);
         }
 
-        private void ListView1MouseDoubleClick(object sender, MouseEventArgs e)
+        private void DataGridViewMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            AddUserControl(int.Parse(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString()), tabControl1);
-        }
-
-
-        private void InsertClauseToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            if (dataGridView2.SelectedRows.Count == 0) return;
-            dataGridView2.Rows.Insert(dataGridView2.SelectedRows[0].Index);
-        }
-
-        private void DeleteSelectedClauseToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            dataGridView2.Rows.RemoveAt(dataGridView2.SelectedRows[0].Index);
+            if (taskGridView.SelectedRows.Count == 0) return;
+            AddUserControl(tabControl1, int.Parse(taskGridView.SelectedRows[0].Cells["ID"].Value.ToString()));
         }
 
         private void DataGridView2MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right) return;
-            DataGridView.HitTestInfo hti = dataGridView2.HitTest(e.X, e.Y);
+            DataGridView.HitTestInfo hti = queryGridView.HitTest(e.X, e.Y);
             if (hti.RowIndex == -1) return;
-            dataGridView2.ClearSelection();
-            dataGridView2.Rows[hti.RowIndex].Selected = true;
+            queryGridView.ClearSelection();
+            queryGridView.Rows[hti.RowIndex].Selected = true;
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
         {
-            using (var frm = new DGVOptions(Table, dataGridView1.Columns))
+            using (var frm = new DGVOptions(Table, taskGridView.Columns))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                     MessageBox.Show("not yet implemented", "TODO");
@@ -141,6 +143,7 @@ namespace TaskManager.Forms
 
         private void ToolStripButton3Click(object sender, EventArgs e)
         {
+            queryGridView.EndEdit();
             using (var sfd = new SaveFileDialog())
             {
                 sfd.FileName = "query";
@@ -148,17 +151,16 @@ namespace TaskManager.Forms
                 sfd.RestoreDirectory = true;
                 sfd.InitialDirectory = Application.StartupPath + @"\Query";
                 if (sfd.ShowDialog() != DialogResult.OK) return;
-                QueryBuilder.SaveQuery(dataGridView2, sfd.FileName);
+                QueryBuilder.SaveQuery(queryGridView, sfd.FileName);
                 QueryBuilder.ReloadQueries(queriesBox);
             }
         }
 
         private void QueriesBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            QueryBuilder.RestoreQuery(dataGridView2,
-                                      string.Format("{0}\\Query\\{1}.xml", Application.StartupPath, queriesBox.Text));
+            QueryBuilder.RestoreQuery(queryGridView, string.Format("{0}.xml", queriesBox.Text));
             ToolStripButton2Click(sender, e);
-            DataClass.SaveSettings("StartupQuery", queriesBox.Text);
+            ConfigurationHelper.SaveSettings("StartupQuery", queriesBox.Text);
         }
     }
 }

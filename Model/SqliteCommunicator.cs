@@ -4,21 +4,23 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using Common;
 
 namespace Model
 {
     public class SqliteCommunicator : ICommunicator
     {
-        private readonly SQLiteDatabaseHelper _db;
-
         /// <summary>
         /// Constructor with database name
         /// </summary>
         public SqliteCommunicator()
         {
-            _db = new SQLiteDatabaseHelper(FileName);
+            new SQLiteDatabaseHelper(FileName);
         }
 
+        /// <summary>
+        /// Path to sqlite database
+        /// </summary>
         private string FileName
         {
             get { return ConfigurationManager.AppSettings["FileName"]; }
@@ -34,7 +36,7 @@ namespace Model
         /// <returns>List of T</returns>
         public IEnumerable<T> GetList<T>(string table) where T : new()
         {
-            return _db.FillDataset(string.Format("select * from '{0}'", table)).ToList<T>();
+            return SQLiteDatabaseHelper.FillDataset(string.Format("select * from '{0}'", table)).ToList<T>();
         }
 
         public void DeleteItem(object key, object id)
@@ -57,22 +59,29 @@ namespace Model
                 .ToDictionary(x => x.Name,
                               x => x.GetValue(item).ToString().Replace("'", "''"));
 
-            if (_db.ExecuteScalar(String.Format("select {0} from '{1}' where {2}='{3}'", key, table, key, id)) ==
+            if (
+                SQLiteDatabaseHelper.ExecuteScalar(String.Format("select {0} from '{1}' where {2}='{3}'", key, table,
+                                                                 key, id)) ==
                 string.Empty)
             {
                 dict.Remove("ID");
-                _db.Insert(table, dict);
-                return _db.GetLastInsertRowId();
+                SQLiteDatabaseHelper.Insert(table, dict);
+                return SQLiteDatabaseHelper.GetLastInsertRowId();
             }
-            _db.Update(table, dict, String.Format("{0}={1}", key, id));
+            SQLiteDatabaseHelper.Update(table, dict, String.Format("{0}={1}", key, id));
             return long.Parse(id.ToString());
         }
 
         #endregion
 
+        /// <summary>
+        /// Allows to select data from database
+        /// </summary>
+        /// <param name="table">tablename</param>
+        /// <returns>select result as DataTable</returns>
         public DataTable GetTable(string table)
         {
-            return _db.FillDataset(string.Format("select * from '{0}'", table));
+            return SQLiteDatabaseHelper.FillDataset(string.Format("select * from '{0}'", table));
         }
 
         /// <summary>
@@ -82,7 +91,7 @@ namespace Model
         public long UpgradeDatabase()
         {
             const int newVersion = 1;
-            int oldVersion = int.Parse(_db.ExecuteScalar("PRAGMA user_version"));
+            int oldVersion = int.Parse(SQLiteDatabaseHelper.ExecuteScalar("PRAGMA user_version"));
             if (newVersion == oldVersion) return newVersion;
             for (int i = oldVersion; i < newVersion; i++)
             {
@@ -90,7 +99,7 @@ namespace Model
                 {
                     case 0:
                         {
-                            _db.ExecuteNonQuery(
+                            SQLiteDatabaseHelper.ExecuteNonQuery(
                                 "CREATE TABLE Data (" +
                                 "ID integer PRIMARY KEY, " +
                                 "Title text, " +
@@ -106,7 +115,7 @@ namespace Model
                                 "Related text, " +
                                 "Description text" +
                                 ")");
-                            _db.ExecuteNonQuery(
+                            SQLiteDatabaseHelper.ExecuteNonQuery(
                                 "CREATE TABLE History (" +
                                 "ID integer PRIMARY KEY, " +
                                 "DataID text, " +
@@ -114,18 +123,18 @@ namespace Model
                                 "User text, " +
                                 "Text text" +
                                 ")");
-                            _db.ExecuteNonQuery(
+                            SQLiteDatabaseHelper.ExecuteNonQuery(
                                 "CREATE TABLE Users (" +
                                 "Login text UNIQUE, " +
                                 "Pass text, " +
                                 "ShowAs text" +
                                 ")");
-                            _db.ExecuteNonQuery("PRAGMA user_version = 1");
+                            SQLiteDatabaseHelper.ExecuteNonQuery("PRAGMA user_version = 1");
                             break;
                         }
                 }
             }
-            return long.Parse(_db.ExecuteScalar("PRAGMA user_version"));
+            return long.Parse(SQLiteDatabaseHelper.ExecuteScalar("PRAGMA user_version"));
         }
     }
 

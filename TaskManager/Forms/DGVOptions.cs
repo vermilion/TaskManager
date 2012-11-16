@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,10 +12,12 @@ namespace TaskManager.Forms
         {
             InitializeComponent();
 
-            listBox1.Items.AddRange(
-                dataTable.Columns.Cast<DataColumn>().Select(x => (object) x.ColumnName).Except(
-                    columnCollection.Cast<DataGridViewColumn>().Select(x => (object) x.Name)).ToArray());
-            listBox2.Items.AddRange(columnCollection.Cast<DataGridViewColumn>().Select(x => (object) x.Name).ToArray());
+            IEnumerable<object> existingColumns =
+                columnCollection.Cast<DataGridViewColumn>().Select(x => (object) x.Name);
+            IEnumerable<object> availiableColumns =
+                dataTable.Columns.Cast<DataColumn>().Select(x => (object) x.ColumnName);
+            listBox1.Items.AddRange(availiableColumns.Except(existingColumns).ToArray());
+            listBox2.Items.AddRange(existingColumns.ToArray());
         }
 
         private void Button1Click(object sender, EventArgs e)

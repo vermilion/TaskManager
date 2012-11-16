@@ -39,7 +39,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mainPage = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.queryGridView = new System.Windows.Forms.DataGridView();
+            this.AndOr = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Field = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.taskGridView = new System.Windows.Forms.DataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CreatedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,14 +55,6 @@
             this.AssignedTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.AndOr = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Field = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Operator = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.insertClauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteSelectedClauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.showClosedToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
@@ -72,18 +70,16 @@
             this.columnAssignedTo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1.SuspendLayout();
             this.mainPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.queryGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.taskGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -95,7 +91,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(938, 547);
+            this.tabControl1.Size = new System.Drawing.Size(938, 672);
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Tag = " ";
             // 
@@ -106,23 +102,110 @@
             this.mainPage.Location = new System.Drawing.Point(4, 22);
             this.mainPage.Name = "mainPage";
             this.mainPage.Padding = new System.Windows.Forms.Padding(3);
-            this.mainPage.Size = new System.Drawing.Size(930, 521);
+            this.mainPage.Size = new System.Drawing.Size(930, 646);
             this.mainPage.TabIndex = 0;
             this.mainPage.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // splitContainer1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 28);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.queryGridView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.taskGridView);
+            this.splitContainer1.Size = new System.Drawing.Size(924, 615);
+            this.splitContainer1.SplitterDistance = 116;
+            this.splitContainer1.TabIndex = 4;
+            // 
+            // queryGridView
+            // 
+            this.queryGridView.AllowUserToResizeColumns = false;
+            this.queryGridView.AllowUserToResizeRows = false;
+            this.queryGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.queryGridView.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.queryGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.queryGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.queryGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.AndOr,
+            this.Field,
+            this.Operator,
+            this.Value});
+            this.queryGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queryGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.queryGridView.Location = new System.Drawing.Point(0, 0);
+            this.queryGridView.MultiSelect = false;
+            this.queryGridView.Name = "queryGridView";
+            this.queryGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.queryGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.queryGridView.Size = new System.Drawing.Size(924, 116);
+            this.queryGridView.TabIndex = 3;
+            this.queryGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView2MouseDown);
+            // 
+            // AndOr
+            // 
+            this.AndOr.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.AndOr.DisplayStyleForCurrentCellOnly = true;
+            this.AndOr.FillWeight = 20F;
+            this.AndOr.HeaderText = "And/Or";
+            this.AndOr.Items.AddRange(new object[] {
+            "And",
+            "Or"});
+            this.AndOr.Name = "AndOr";
+            this.AndOr.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Field
+            // 
+            this.Field.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Field.DisplayStyleForCurrentCellOnly = true;
+            this.Field.FillWeight = 20F;
+            this.Field.HeaderText = "Field";
+            this.Field.Name = "Field";
+            this.Field.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Operator
+            // 
+            this.Operator.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Operator.DisplayStyleForCurrentCellOnly = true;
+            this.Operator.FillWeight = 15F;
+            this.Operator.HeaderText = "Operator";
+            this.Operator.Items.AddRange(new object[] {
+            "<",
+            ">",
+            "=",
+            "<=",
+            ">=",
+            "<>",
+            "like"});
+            this.Operator.Name = "Operator";
+            this.Operator.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Value
+            // 
+            this.Value.FillWeight = 45F;
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
+            this.Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // taskGridView
+            // 
+            this.taskGridView.AllowUserToAddRows = false;
+            this.taskGridView.AllowUserToDeleteRows = false;
+            this.taskGridView.AllowUserToOrderColumns = true;
+            this.taskGridView.AllowUserToResizeRows = false;
+            this.taskGridView.AutoGenerateColumns = false;
+            this.taskGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.taskGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.taskGridView.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.taskGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.taskGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.taskGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
             this.State,
             this.CreatedBy,
@@ -131,13 +214,13 @@
             this.Progress,
             this.AssignedTo,
             this.Title});
-            this.dataGridView1.DataSource = this.bindingSource1;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.GridColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
+            this.taskGridView.DataSource = this.bindingSource1;
+            this.taskGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.taskGridView.GridColor = System.Drawing.SystemColors.Control;
+            this.taskGridView.Location = new System.Drawing.Point(0, 0);
+            this.taskGridView.MultiSelect = false;
+            this.taskGridView.Name = "taskGridView";
+            this.taskGridView.ReadOnly = true;
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -145,13 +228,13 @@
             dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(924, 393);
-            this.dataGridView1.TabIndex = 2;
-            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView1MouseDoubleClick);
+            this.taskGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.taskGridView.RowHeadersVisible = false;
+            this.taskGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.taskGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.taskGridView.Size = new System.Drawing.Size(924, 495);
+            this.taskGridView.TabIndex = 2;
+            this.taskGridView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DataGridViewMouseDoubleClick);
             // 
             // ID
             // 
@@ -231,96 +314,9 @@
             this.Title.Name = "Title";
             this.Title.ReadOnly = true;
             // 
-            // dataGridView2
+            // bindingSource1
             // 
-            this.dataGridView2.AllowUserToResizeColumns = false;
-            this.dataGridView2.AllowUserToResizeRows = false;
-            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.AndOr,
-            this.Field,
-            this.Operator,
-            this.Value});
-            this.dataGridView2.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView2.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView2.MultiSelect = false;
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView2.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView2.Size = new System.Drawing.Size(924, 93);
-            this.dataGridView2.TabIndex = 3;
-            this.dataGridView2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView2MouseDown);
-            // 
-            // AndOr
-            // 
-            this.AndOr.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.AndOr.DisplayStyleForCurrentCellOnly = true;
-            this.AndOr.FillWeight = 20F;
-            this.AndOr.HeaderText = "And/Or";
-            this.AndOr.Items.AddRange(new object[] {
-            "And",
-            "Or"});
-            this.AndOr.Name = "AndOr";
-            this.AndOr.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Field
-            // 
-            this.Field.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Field.DisplayStyleForCurrentCellOnly = true;
-            this.Field.FillWeight = 20F;
-            this.Field.HeaderText = "Field";
-            this.Field.Name = "Field";
-            this.Field.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Operator
-            // 
-            this.Operator.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Operator.DisplayStyleForCurrentCellOnly = true;
-            this.Operator.FillWeight = 15F;
-            this.Operator.HeaderText = "Operator";
-            this.Operator.Items.AddRange(new object[] {
-            "<",
-            ">",
-            "=",
-            "<=",
-            ">=",
-            "<>"});
-            this.Operator.Name = "Operator";
-            this.Operator.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Value
-            // 
-            this.Value.FillWeight = 45F;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.insertClauseToolStripMenuItem,
-            this.deleteSelectedClauseToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 48);
-            // 
-            // insertClauseToolStripMenuItem
-            // 
-            this.insertClauseToolStripMenuItem.Name = "insertClauseToolStripMenuItem";
-            this.insertClauseToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.insertClauseToolStripMenuItem.Text = "Insert Clause";
-            this.insertClauseToolStripMenuItem.Click += new System.EventHandler(this.InsertClauseToolStripMenuItemClick);
-            // 
-            // deleteSelectedClauseToolStripMenuItem
-            // 
-            this.deleteSelectedClauseToolStripMenuItem.Name = "deleteSelectedClauseToolStripMenuItem";
-            this.deleteSelectedClauseToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.deleteSelectedClauseToolStripMenuItem.Text = "Delete Selected Clause";
-            this.deleteSelectedClauseToolStripMenuItem.Click += new System.EventHandler(this.DeleteSelectedClauseToolStripMenuItemClick);
+            this.bindingSource1.Sort = "ID DESC";
             // 
             // toolStrip1
             // 
@@ -433,32 +429,13 @@
             // 
             this.columnHeader1.Text = "ID";
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 28);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.dataGridView2);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(924, 490);
-            this.splitContainer1.SplitterDistance = 93;
-            this.splitContainer1.TabIndex = 4;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(938, 547);
+            this.ClientSize = new System.Drawing.Size(938, 672);
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -466,16 +443,15 @@
             this.tabControl1.ResumeLayout(false);
             this.mainPage.ResumeLayout(false);
             this.mainPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.queryGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.taskGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -495,16 +471,9 @@
         public System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView taskGridView;
+        private System.Windows.Forms.DataGridView queryGridView;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem insertClauseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteSelectedClauseToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewComboBoxColumn AndOr;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Field;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Operator;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn State;
@@ -518,6 +487,10 @@
         private System.Windows.Forms.ToolStripComboBox queriesBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridViewComboBoxColumn AndOr;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Field;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Operator;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }
 

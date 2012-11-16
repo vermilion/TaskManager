@@ -3,6 +3,9 @@ using System.Globalization;
 
 namespace Model
 {
+    /// <summary>
+    /// Base item
+    /// </summary>
     public class Base
     {
         public string Datetime;
@@ -16,6 +19,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// Task related item
+    /// </summary>
     public class Data : Base
     {
         public string AssignedTo;
@@ -35,6 +41,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// History entry
+    /// </summary>
     public class History : Base
     {
         public long DataID;
@@ -46,6 +55,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// User identity
+    /// </summary>
     public class User
     {
         public string Login;
@@ -53,6 +65,9 @@ namespace Model
         public string ShowAs;
     }
 
+    /// <summary>
+    /// Stores current user data
+    /// </summary>
     public static class UserData
     {
         public static string UserName { get; set; }
